@@ -15,40 +15,56 @@ void sm(int motorPort);
 void turnRight(int speed);
 void turnLeft(int speed);
 
+// constants
+const double RIGHT_TURN_CONSTANT = 0.5;
+
 // main function
 task main()
 {
-	turnRight(100);
+	turnLeft(100);
 	wait(5);
 	moveStop();
 }
 
 // functions
 
-void m(int motorPort, int speed) {
-	startMotor(motorPort, speed);	
+// move in a square shape
+void moveSquare(int dist, int speed) {
+	for (int i = 0; i < 4; i++) {
+		moveSpeed(speed);
+		wait((double) dist / speed);
+		if (i < 3) {turnLeft(RIGHT_TURN_CONSTANT * speed);}
+	}
+	sm();
 }
 
+//  startMotor alias
+void m(int motorPort, int speed) {
+	startMotor(motorPort, speed);
+}
+
+// stopMotor alias
 void sm(int motorPort) {
 	stopMotor(motorPort);
 }
 
 // move all motors at the same speed
 void moveSpeed(int speed) {
-  m(FR, speed);
-  m(FL, speed);
-  m(BR, speed);
- 	m(BL, speed);
+	m(FR, speed);
+	m(FL, speed);
+	m(BR, speed);
+	m(BL, speed);
 }
 
 // stop all motors
 void moveStop() {
-  sm(FR);
-  sm(FL);
-  sm(BR);
- 	sm(BL);
+	sm(FR);
+	sm(FL);
+	sm(BR);
+	sm(BL);
 }
 
+// turn robot right at specified speed
 void turnRight(int speed) {
 	m(FL, speed);
 	m(BL, speed);
@@ -56,6 +72,7 @@ void turnRight(int speed) {
 	m(BR, -1 * speed);
 }
 
+// turn robot left at specified speed
 void turnLeft(int speed) {
 	m(FL, -1 * speed);
 	m(BL, -1 * speed);
